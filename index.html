@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yahia & Alia's Marriage Contract</title>
+    <title>Yahia & Alia's RSVP Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;600;700&display=swap">
     <style>
         body {
-            background-color: #f8f4e9;
+            background-color: #f0f6fb;
             font-family: 'Playfair Display', serif;
-            background-image: url('https://i.ibb.co/zVdNhpTc/mosque-sketch.jpg');
+            background-image: url('https://i.etsystatic.com/54691848/r/il/9abf84/6997927313/il_1588xN.6997927313_6ymw.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             position: relative;
+            margin: 0;
+            color: #333;
         }
+
         body::before {
             content: '';
             position: absolute;
@@ -23,59 +28,22 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(248, 244, 233, 0.85);
+            background-color: rgba(240, 246, 251, 0.92);
             z-index: -1;
         }
+
         .handwritten {
             font-family: 'Dancing Script', cursive;
         }
-        .sketch-border {
-    border: 1px solid #ccc;
-    position: relative;
-}
-        .sketch-border::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 1px dashed #ccc;
-    pointer-events: none;
-}
-        .sketch-shadow {
-            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+
+        .luxury-card {
+            box-shadow: 0 25px 50px -12px rgba(14, 116, 144, 0.12), 0 0 0 1px rgba(186, 230, 253, 0.6);
         }
-        .map-icon {
-            filter: drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.2));
-        }
-        /* Slideshow styles */
-        .slideshow-container {
-            position: relative;
-            overflow: hidden;
-            height: 200px;
-        }
-        .slideshow-inner {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        }
-        .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            animation: slideShow 24s infinite;
-        }
-        .slide:nth-child(1) { animation-delay: 0s; }
-        .slide:nth-child(2) { animation-delay: 4s; }
-        .slide:nth-child(3) { animation-delay: 8s; }
-        .slide:nth-child(4) { animation-delay: 12s; }
-        .slide:nth-child(5) { animation-delay: 16s; }
-        .slide:nth-child(6) { animation-delay: 20s; }
-        @keyframes slideShow {
-            0%, 15% { opacity: 1; }
-            16.67%, 100% { opacity: 0; }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .fade-in {
@@ -83,181 +51,222 @@
             transform: translateY(20px);
             animation: fadeInUp 1s ease forwards;
         }
+
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        #slideshow-indicators span.active {
-    background-color: #b59b86;
-    transform: scale(1.2);
-        }
-        
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-3xl w-full backdrop-blur-sm bg-white/30 rounded-lg overflow-hidden border border-gray-300 shadow-md fade-in">
-        <!-- Header with Mosque Image -->
-        <div class="relative fade-in" style="animation-delay: 0.2s; animation-fill-mode: both;">
-            <img src="https://i.ibb.co/zVdNhpTc/mosque-sketch.jpg" alt="Mosque Sketch" class="w-full h-48 sm:h-64 md:h-96 object-cover object-center">
-            <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-                <div class="text-center px-2 sm:px-4">
-                    <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-white handwritten mb-2 fade-in" style="animation-delay: 0.4s;">Yahia & Alia</h1>
-                    <p class="text-lg sm:text-xl md:text-2xl text-white handwritten fade-in" style="animation-delay: 0.6s;">Katb Ketab</p>
-                </div>
+
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-6">
+    <div class="relative max-w-5xl w-full backdrop-blur-md bg-white/75 rounded-3xl overflow-hidden luxury-card fade-in my-4 p-4 sm:p-10">
+
+        <!-- Header -->
+        <div class="text-center pb-8 border-b border-blue-100/80 mb-8 space-y-2">
+            <span class="text-xs uppercase tracking-[0.3em] text-sky-700 font-semibold">Live Guest Management</span>
+            <h1 class="text-4xl sm:text-6xl font-bold text-gradient handwritten py-1">Yahia & Alia's RSVP</h1>
+            <p class="text-sm sm:text-base text-sky-800 font-medium tracking-wide">November 27, 2026</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="bg-white/90 p-6 rounded-2xl shadow-sm border border-blue-100/80 backdrop-blur-sm text-center">
+                <h3 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1">Total Invited Guests</h3>
+                <p class="text-4xl font-bold text-sky-800 handwritten" id="totalPrimary">0</p>
+            </div>
+            <div class="bg-white/90 p-6 rounded-2xl shadow-sm border border-blue-100/80 backdrop-blur-sm text-center">
+                <h3 class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1">Total Plus Ones</h3>
+                <p class="text-4xl font-bold text-sky-800 handwritten" id="totalPlusOnes">0</p>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="p-4 sm:p-8 md:p-12 space-y-6 fade-in" style="animation-delay: 0.8s;">
-            <!-- Photo Slideshow -->
-            <div class="slideshow-container mx-auto max-w-xs sm:max-w-sm md:max-w-md mb-6">
-                <div class="slideshow-inner">
-                    <div class="slide">
-                        <img src="https://pn-site-storage.fra1.cdn.digitaloceanspaces.com/PN-SITE-2-WP/uploads/2022/11/19_2020-637357588815795768-579.jpg" alt="Couple Photo 1" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                    <div class="slide">
-                        <img src="https://pn-site-storage.fra1.cdn.digitaloceanspaces.com/PN-SITE-2-WP/uploads/2022/11/03_big.jpg" alt="Couple Photo 2" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                    <div class="slide">
-                        <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noZJP4aG8phyUmmgr2cJ9vu6o4YEeDsXWT6_fPJ8yALXfuyD4Pt4UeZA2NE9acpC3mXoNOWl3RLwLp_ZKZABwrsvf9psbR6gYc4eITlmtle7FgEsViyrGZinojAEYpmwIfCrb7MaA=s645-k-no" alt="Couple Photo 3" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                    <div class="slide">
-                        <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4no7BnCS1kLsD4OeH8vCCy2R8kiuuCL1d4EIU9xUCMcmt_IEy4dVVRQDYIk-glkx8Ja9mlI_qylX_EvrXWQK6Xy7oEVaTSdM55PRZupAhpaGQf0Sn4hRP8iWkqL3eA8IdyAMvLld8g=s584-k-no" alt="Couple Photo 4" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                    <div class="slide">
-                        <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrXLNk79l9xkEC6P4WWgSrim9NQ5Hfa0tiTq8Gu8a7DCMSHZDsbw_FoPsH-x0MnpMv501cmRRUcSTgY8UrWANOIVNCEI8aTWp0W_xBKM-F9bL5UHEv2VGCvQnxwIHGoXkdIrSG31g=s584-k-no" alt="Couple Photo 5" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                    <div class="slide">
-                        <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nq3RSeyQz702zG2bAy2zjRU3Zp3TcEAkmUj8D09geieC9nUYEdHAoxC0BWdYhFg9owHdVNLAZbFDEhftCEIKLQbOOly0R_sjogpgV8ylA50a_ArsUGABEyT_i8_NYLuTi5aY5bw1g=s460-k-no" alt="Couple Photo 6" class="w-full h-auto rounded-lg shadow-md">
-                    </div>
-                </div>
-            </div>
+        <!-- Filters Bar -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+            <input type="text" id="searchInput" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" placeholder="Filter by name..." onkeyup="filterTable()">
+            
+            <select id="responseFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
+                <option value="">All Attendance Responses</option>
+                <option value="Yes, can't wait!">Yes, can't wait!</option>
+                <option value="Sorry, can't make it">Sorry, can't make it</option>
+            </select>
 
-<!-- Slideshow Indicators -->
-<div class="flex justify-center mt-2 space-x-2" id="slideshow-indicators">
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-    <span class="w-3 h-3 bg-gray-300 rounded-full transition-all duration-300"></span>
-</div>
+            <select id="extraFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
+                <option value="">All Plus One Options</option>
+            </select>
+        </div>
 
-            <!-- Date and Time -->
-            <div class="text-center">
-                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-2 handwritten">24th October 2025</h2>
-                <p class="text-lg sm:text-xl md:text-2xl">7:00 PM - 8:30 PM</p>
-            </div>
+        <!-- Data Table Wrapper -->
+        <div class="w-full overflow-x-auto bg-white/90 rounded-2xl shadow-sm border border-blue-100/80">
+            <table class="w-full border-collapse text-left whitespace-nowrap">
+                <thead>
+                    <tr id="tableHeaders" class="bg-sky-800 text-white text-sm"></tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-blue-50 text-sm text-gray-700">
+                    <tr>
+                        <td colspan="4" class="p-6 text-center italic text-gray-500">Loading RSVP data from Google Sheets...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Mosque Name -->
-            <div class="text-center border-t border-b border-gray-300 py-4">
-                <h3 class="text-lg sm:text-xl md:text-2xl font-semibold handwritten">Hassan El Sharbatly Mosque</h3>
-            </div>
-
-            <!-- Location Links -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
-                <a href="https://maps.app.goo.gl/shwmVfJ7fqd5HhTM7" target="_blank" class="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-300 text-sm sm:text-base">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 map-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                        <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 256c-35.3 0-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64s-28.7 64-64 64z"/>
-                    </svg>
-                    <span>Google Maps</span>
-                </a>
-                <a href="https://maps.apple.com/place?place-id=I3E50B58B9279398F&address=Moustafa+Amin+Street%2C+Cairo%2C+Egypt&coordinate=30.0292201%2C31.4304601&name=Hassan+El+Sharbatly+Mosque&_provider=9902" target="_blank" class="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-300 text-sm sm:text-base">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 map-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                        <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 256c-35.3 0-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64s-28.7 64-64 64z"/>
-                    </svg>
-                    <span>Apple Maps</span>
-                </a>
-            </div>
-
-            <!-- Gift Note -->
-            <div class="text-center mt-6 sm:mt-8 p-4 bg-amber-50 rounded-lg border border-amber-200">
-                <p class="text-lg sm:text-xl md:text-2xl font-semibold handwritten">
-                    A small gift of our appreciation awaits you.<br>
-                    Please take just one, so others may enjoy too.
-                </p>
-            </div>
-
-            <!-- Countdown Timer -->
-            <div class="text-center mt-6 sm:mt-8">
-                <h3 class="text-lg sm:text-xl handwritten mb-2">Counting Down to Our Special Day</h3>
-                <div id="countdown" class="flex justify-center gap-2 sm:gap-4">
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-bold handwritten days">00</div>
-                        <div class="text-xs sm:text-sm">Days</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-bold handwritten hours">00</div>
-                        <div class="text-xs sm:text-sm">Hours</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-bold handwritten minutes">00</div>
-                        <div class="text-xs sm:text-sm">Minutes</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl sm:text-3xl font-bold handwritten seconds">00</div>
-                        <div class="text-xs sm:text-sm">Seconds</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="text-center text-xs sm:text-sm text-gray-600 mt-10">
-                <p class="text-lg leading-relaxed">We are honored by your presence...</p>
-                <p class="mt-2 handwritten text-base sm:text-lg">Yahia & Alia</p>
-            </div>
+        <!-- Footer -->
+        <div class="text-center text-xs sm:text-sm text-gray-600 pt-8 mt-8 border-t border-blue-100/80 space-y-1">
+            <p class="handwritten text-3xl text-sky-900">Yahia & Alia</p>
         </div>
     </div>
+
+    <!-- Script Logic -->
     <script>
-    const slides = document.querySelectorAll(".slide");
-    const indicators = document.querySelectorAll("#slideshow-indicators span");
-    let currentSlide = 0;
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPkJHSujiT_SfZEgG8MMA9spUfWIAYDh-xEVZfS6rLwc4gNQe4kLC75eJTqBz9E8C1vS1rg4-8kRo-/pub?output=csv';
 
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.style.opacity = i === index ? "1" : "0";
-        });
-        indicators.forEach((dot, i) => {
-            dot.classList.toggle("active", i === index);
-        });
-    }
+        let globalData = [];
+        const hiddenColumns = [0, 4, 5];
 
-    showSlide(currentSlide);
-
-    setInterval(() => {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }, 4000);
-
-    // Countdown timer stays unchanged
-    const weddingDate = new Date("2025-10-24T18:00:00+02:00");
-    const countDownDate = weddingDate.getTime();
-
-    const x = setInterval(function() {
-        const now = new Date();
-        const options = { timeZone: 'Africa/Cairo' };
-        const egyptTime = new Date(now.toLocaleString('en-US', options));
-        const nowTime = egyptTime.getTime();
-
-        const distance = countDownDate - nowTime;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.querySelector(".days").innerHTML = days.toString().padStart(2, '0');
-        document.querySelector(".hours").innerHTML = hours.toString().padStart(2, '0');
-        document.querySelector(".minutes").innerHTML = minutes.toString().padStart(2, '0');
-        document.querySelector(".seconds").innerHTML = seconds.toString().padStart(2, '0');
-
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("countdown").innerHTML = "The wedding has begun!";
+        async function loadSheetData() {
+            try {
+                const response = await fetch(csvUrl);
+                const data = await response.text();
+                parseCSV(data);
+            } catch (error) {
+                document.getElementById('tableBody').innerHTML = `<tr><td colspan="4" class="p-6 text-center text-red-500 font-medium">Failed to load data. Please check your connection.</td></tr>`;
+            }
         }
-    }, 1000);
-</script>
+
+        function parseCSV(text) {
+            let lines = text.split('\n').filter(line => line.trim() !== '');
+            globalData = lines.map(line => {
+                let row = [];
+                let insideQuote = false;
+                let currentVal = '';
+                for (let i = 0; i < line.length; i++) {
+                    let char = line[i];
+                    if (char === '"') {
+                        insideQuote = !insideQuote;
+                    } else if (char === ',' && !insideQuote) {
+                        row.push(currentVal.trim());
+                        currentVal = '';
+                    } else {
+                        currentVal += char;
+                    }
+                }
+                row.push(currentVal.trim());
+                return row;
+            });
+
+            if (globalData.length > 0) {
+                populateExtraDropdown(globalData.slice(3));
+                renderDashboard(globalData);
+            }
+        }
+
+        function populateExtraDropdown(dataRows) {
+            let extraFilterSelect = document.getElementById('extraFilter');
+            let uniqueValues = new Set();
+
+            dataRows.forEach(row => {
+                row.forEach(cell => {
+                    if (cell.toLowerCase().includes("extra") || cell.toLowerCase().includes("just me")) {
+                        uniqueValues.add(cell.trim());
+                    }
+                });
+            });
+
+            extraFilterSelect.innerHTML = '<option value="">All Plus One Options</option>';
+
+            Array.from(uniqueValues).sort().forEach(val => {
+                let opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = val;
+                extraFilterSelect.appendChild(opt);
+            });
+        }
+
+        function renderDashboard(rows) {
+            let headers = rows[0];
+            let dataRows = rows.slice(3);
+
+            let headerHtml = '';
+            headers.forEach((h, index) => {
+                if (!hiddenColumns.includes(index)) {
+                    headerHtml += `<th class="p-4 font-semibold tracking-wide">${h}</th>`;
+                }
+            });
+            document.getElementById('tableHeaders').innerHTML = headerHtml;
+
+            updateSummaryCards(dataRows);
+            displayTableRows(dataRows);
+        }
+
+        function updateSummaryCards(rows) {
+            let activePrimaryCount = rows.filter(row => row.some(cell => cell === "1" || cell.toLowerCase().includes("yes"))).length;
+            
+            let totalExtraAdults = rows.reduce((sum, row) => {
+                let rowSum = 0;
+                row.forEach(cell => {
+                    if(cell.includes("extra adults") || cell.includes("extra adult")) {
+                        let match = cell.match(/\d+/);
+                        if(match) rowSum += parseInt(match[0]);
+                    }
+                });
+                return sum + rowSum;
+            }, 0);
+
+            document.getElementById('totalPrimary').innerText = activePrimaryCount;
+            document.getElementById('totalPlusOnes').innerText = totalExtraAdults;
+        }
+
+        function displayTableRows(rows) {
+            let bodyHtml = '';
+            if(rows.length === 0) {
+                bodyHtml = `<tr><td colspan="10" class="p-6 text-center text-gray-500 italic">No records found matching your filters</td></tr>`;
+            } else {
+                rows.forEach(row => {
+                    bodyHtml += '<tr class="hover:bg-sky-50/50 transition-colors">';
+                    row.forEach((cell, index) => {
+                        if (!hiddenColumns.includes(index)) {
+                            bodyHtml += `<td class="p-4">${cell}</td>`;
+                        }
+                    });
+                    bodyHtml += '</tr>';
+                });
+            }
+            document.getElementById('tableBody').innerHTML = bodyHtml;
+        }
+
+        function filterTable() {
+            let nameInput = document.getElementById('searchInput').value.toLowerCase();
+            let responseVal = document.getElementById('responseFilter').value;
+            let extraVal = document.getElementById('extraFilter').value;
+
+            let dataRows = globalData.slice(3);
+
+            let filtered = dataRows.filter(row => {
+                let matchesName = row.some((cell, index) => {
+                    if (hiddenColumns.includes(index)) return false;
+                    return cell.toLowerCase().includes(nameInput);
+                });
+
+                let matchesResponse = true;
+                if (responseVal !== "") {
+                    matchesResponse = row.some(cell => cell.trim() === responseVal);
+                }
+
+                let matchesExtra = true;
+                if (extraVal !== "") {
+                    matchesExtra = row.some(cell => cell.trim() === extraVal);
+                }
+
+                return matchesName && matchesResponse && matchesExtra;
+            });
+
+            displayTableRows(filtered);
+        }
+
+        loadSheetData();
+    </script>
+</body>
+
 </html>
