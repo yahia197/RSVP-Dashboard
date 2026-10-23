@@ -163,7 +163,7 @@
             });
 
             if (globalData.length > 0) {
-                populateExtraDropdown(globalData.slice(3));
+                populateExtraDropdown(globalData.slice(1));
                 renderDashboard(globalData);
             }
         }
@@ -192,7 +192,7 @@
 
         function renderDashboard(rows) {
             let headers = rows[0];
-            let dataRows = rows.slice(3);
+            let dataRows = rows.slice(1);
 
             let headerHtml = '';
             headers.forEach((h, index) => {
@@ -207,12 +207,16 @@
         }
 
         function updateSummaryCards(rows) {
-            let activePrimaryCount = rows.filter(row => row.some(cell => cell === "1" || cell.toLowerCase().includes("yes"))).length;
+            // Count rows where Column E (index 4) equals "1" (attending guests)
+            let activePrimaryCount = rows.filter(row => {
+                let colEVal = row[4] ? row[4].trim() : "";
+                return colEVal === "1";
+            }).length;
             
             let totalExtraAdults = rows.reduce((sum, row) => {
                 let rowSum = 0;
                 row.forEach(cell => {
-                    if(cell.includes("extra adults") || cell.includes("extra adult")) {
+                    if(cell.toLowerCase().includes("extra")) {
                         let match = cell.match(/\d+/);
                         if(match) rowSum += parseInt(match[0]);
                     }
@@ -250,7 +254,7 @@
             let responseVal = document.getElementById('responseFilter').value;
             let extraVal = document.getElementById('extraFilter').value;
 
-            let dataRows = globalData.slice(3);
+            let dataRows = globalData.slice(1);
 
             let filtered = dataRows.filter(row => {
                 let matchesName = row.some((cell, index) => {
