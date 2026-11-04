@@ -90,18 +90,33 @@
         </div>
 
         <!-- Filters Bar -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-8">
-            <input type="text" id="searchInput" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" placeholder="Filter by name..." onkeyup="filterTable()">
-            
-            <select id="responseFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
-                <option value="">All Attendance Responses</option>
-                <option value="Yes, can't wait!">Yes, can't wait!</option>
-                <option value="Sorry, can't make it">Sorry, can't make it</option>
-            </select>
+        <div class="flex flex-col gap-4 mb-8">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="searchInput" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" placeholder="Filter by name..." onkeyup="filterTable()">
+                
+                <select id="responseFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
+                    <option value="">All Attendance Responses</option>
+                    <option value="Yes, can't wait!">Yes, can't wait!</option>
+                    <option value="Sorry, can't make it">Sorry, can't make it</option>
+                </select>
 
-            <select id="extraFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
-                <option value="">All Plus One Options</option>
-            </select>
+                <select id="extraFilter" class="flex-1 p-3 bg-white/90 border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-700" onchange="filterTable()">
+                    <option value="">All Plus One Options</option>
+                </select>
+            </div>
+
+            <!-- Inviter Multi-Filter Pills Container -->
+            <div class="bg-white/90 p-4 border border-blue-200 rounded-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-1">
+                    <span class="text-xs uppercase tracking-widest text-gray-500 font-semibold">Filter by Inviter (Select multiple):</span>
+                    <span class="text-xs font-semibold text-sky-800 bg-sky-50 px-2.5 py-1 rounded-md border border-blue-100 self-start sm:self-auto">
+                        Selected Inviter Total: <span id="selectedInviterTotal" class="font-bold">0</span> guests
+                    </span>
+                </div>
+                <div id="inviterFilters" class="flex flex-wrap gap-2">
+                    <!-- Dynamic checkboxes/pills will be injected here -->
+                </div>
+            </div>
         </div>
 
         <!-- Data Table Wrapper -->
@@ -129,7 +144,7 @@
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPkJHSujiT_SfZEgG8MMA9spUfWIAYDh-xEVZfS6rLwc4gNQe4kLC75eJTqBz9E8C1vS1rg4-8kRo-/pub?output=csv';
 
         let globalData = [];
-        const hiddenColumns = [0, 4, 5];
+        const hiddenColumns = [0, 4, 5, 6]; // Column G: Inviter name
 
         async function loadSheetData() {
             try {
@@ -164,6 +179,7 @@
 
             if (globalData.length > 0) {
                 populateExtraDropdown(globalData.slice(1));
+                populateInviterFilters(globalData.slice(1));
                 renderDashboard(globalData);
             }
         }
@@ -190,6 +206,38 @@
             });
         }
 
+        function populateInviterFilters(dataRows) {
+            let container = document.getElementById('inviterFilters');
+            let uniqueInviters = new Set();
+
+            dataRows.forEach(row => {
+                let inviter = row[6] ? row[6].trim() : ""; // Column G is index 6
+                if (inviter !== "") {
+                    uniqueInviters.add(inviter);
+                }
+            });
+
+            let html = `<label class="inline-flex items-center space-x-2 text-xs font-medium bg-sky-100/70 hover:bg-sky-200 text-sky-900 px-3 py-1.5 rounded-lg cursor-pointer transition-colors">
+                <input type="checkbox" id="selectAllInviters" checked onchange="toggleAllInviters(this)" class="rounded text-sky-700 focus:ring-sky-600">
+                <span>Select All</span>
+            </label>`;
+
+            Array.from(uniqueInviters).sort().forEach(inviter => {
+                html += `<label class="inline-flex items-center space-x-2 text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" name="inviterCheckbox" value="${inviter}" checked onchange="filterTable()" class="rounded text-sky-700 focus:ring-sky-600">
+                    <span>${inviter}</span>
+                </label>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleAllInviters(selectAllCheckbox) {
+            let checkboxes = document.querySelectorAll('input[name="inviterCheckbox"]');
+            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+            filterTable();
+        }
+
         function renderDashboard(rows) {
             let headers = rows[0];
             let dataRows = rows.slice(1);
@@ -207,7 +255,6 @@
         }
 
         function updateSummaryCards(rows) {
-            // Count rows where Column E (index 4) equals "1" (attending guests)
             let activePrimaryCount = rows.filter(row => {
                 let colEVal = row[4] ? row[4].trim() : "";
                 return colEVal === "1";
@@ -229,6 +276,26 @@
             document.getElementById('totalPrimary').innerText = activePrimaryCount;
             document.getElementById('totalPlusOnes').innerText = totalExtraAdults;
             document.getElementById('totalCombined').innerText = totalCombined;
+        }
+
+        function calculateCombinedGuestsForRows(rows) {
+            let activePrimaryCount = rows.filter(row => {
+                let colEVal = row[4] ? row[4].trim() : "";
+                return colEVal === "1";
+            }).length;
+            
+            let totalExtraAdults = rows.reduce((sum, row) => {
+                let rowSum = 0;
+                row.forEach(cell => {
+                    if(cell.toLowerCase().includes("extra")) {
+                        let match = cell.match(/\d+/);
+                        if(match) rowSum += parseInt(match[0]);
+                    }
+                });
+                return sum + rowSum;
+            }, 0);
+
+            return activePrimaryCount + totalExtraAdults;
         }
 
         function displayTableRows(rows) {
@@ -254,6 +321,9 @@
             let responseVal = document.getElementById('responseFilter').value;
             let extraVal = document.getElementById('extraFilter').value;
 
+            let selectedInviters = Array.from(document.querySelectorAll('input[name="inviterCheckbox"]:checked'))
+                                        .map(cb => cb.value);
+
             let dataRows = globalData.slice(1);
 
             let filtered = dataRows.filter(row => {
@@ -272,8 +342,19 @@
                     matchesExtra = row.some(cell => cell.trim() === extraVal);
                 }
 
-                return matchesName && matchesResponse && matchesExtra;
+                let rowInviter = row[6] ? row[6].trim() : "";
+                let matchesInviter = selectedInviters.includes(rowInviter);
+
+                return matchesName && matchesResponse && matchesExtra && matchesInviter;
             });
+
+            // Calculate and update the specific inviter subtotal badge based ONLY on the inviter filter selection
+            let inviterFilteredRows = dataRows.filter(row => {
+                let rowInviter = row[6] ? row[6].trim() : "";
+                return selectedInviters.includes(rowInviter);
+            });
+            let selectedInviterCombinedCount = calculateCombinedGuestsForRows(inviterFilteredRows);
+            document.getElementById('selectedInviterTotal').innerText = selectedInviterCombinedCount;
 
             displayTableRows(filtered);
         }
