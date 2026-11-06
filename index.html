@@ -181,7 +181,7 @@
                 populateExtraDropdown(globalData.slice(1));
                 populateInviterFilters(globalData.slice(1));
                 renderDashboard(globalData);
-                filterTable(); // <--- Added this to initialize the counts on first load!
+                filterTable(); 
             }
         }
 
@@ -210,11 +210,14 @@
         function populateInviterFilters(dataRows) {
             let container = document.getElementById('inviterFilters');
             let uniqueInviters = new Set();
+            let hasBlanks = false;
 
             dataRows.forEach(row => {
                 let inviter = row[6] ? row[6].trim() : ""; // Column G is index 6
                 if (inviter !== "") {
                     uniqueInviters.add(inviter);
+                } else {
+                    hasBlanks = true;
                 }
             });
 
@@ -222,6 +225,14 @@
                 <input type="checkbox" id="selectAllInviters" checked onchange="toggleAllInviters(this)" class="rounded text-sky-700 focus:ring-sky-600">
                 <span>Select All</span>
             </label>`;
+
+            // Add the Blanks option if there are unassigned rows
+            if (hasBlanks) {
+                html += `<label class="inline-flex items-center space-x-2 text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-900 px-3 py-1.5 rounded-lg cursor-pointer transition-colors border border-amber-200">
+                    <input type="checkbox" name="inviterCheckbox" value="__BLANK__" checked onchange="filterTable()" class="rounded text-sky-700 focus:ring-sky-600">
+                    <span>(Blanks / Unassigned)</span>
+                </label>`;
+            }
 
             Array.from(uniqueInviters).sort().forEach(inviter => {
                 html += `<label class="inline-flex items-center space-x-2 text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg cursor-pointer transition-colors">
@@ -344,7 +355,12 @@
                 }
 
                 let rowInviter = row[6] ? row[6].trim() : "";
-                let matchesInviter = selectedInviters.includes(rowInviter);
+                let matchesInviter = false;
+                if (rowInviter === "") {
+                    matchesInviter = selectedInviters.includes("__BLANK__");
+                } else {
+                    matchesInviter = selectedInviters.includes(rowInviter);
+                }
 
                 return matchesName && matchesResponse && matchesExtra && matchesInviter;
             });
@@ -352,6 +368,9 @@
             // Calculate and update the specific inviter subtotal badge based ONLY on the inviter filter selection
             let inviterFilteredRows = dataRows.filter(row => {
                 let rowInviter = row[6] ? row[6].trim() : "";
+                if (rowInviter === "") {
+                    return selectedInviters.includes("__BLANK__");
+                }
                 return selectedInviters.includes(rowInviter);
             });
             let selectedInviterCombinedCount = calculateCombinedGuestsForRows(inviterFilteredRows);
