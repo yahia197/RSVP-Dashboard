@@ -105,6 +105,16 @@
                 </select>
             </div>
 
+            <!-- Table Assignments Summary Section -->
+            <div class="bg-white/90 p-4 border border-blue-200 rounded-xl">
+                <div class="mb-2">
+                    <span class="text-xs uppercase tracking-widest text-gray-500 font-semibold">Table Assignments Summary (Count &gt;= 1):</span>
+                </div>
+                <div id="tableSummaryContainer" class="flex flex-wrap gap-2">
+                    <!-- Dynamic table badges will be injected here -->
+                </div>
+            </div>
+
             <!-- Inviter Multi-Filter Pills Container -->
             <div class="bg-white/90 p-4 border border-blue-200 rounded-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-1">
@@ -144,7 +154,7 @@
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPkJHSujiT_SfZEgG8MMA9spUfWIAYDh-xEVZfS6rLwc4gNQe4kLC75eJTqBz9E8C1vS1rg4-8kRo-/pub?output=csv';
 
         let globalData = [];
-        const hiddenColumns = [0, 4, 5, 6]; // Column G: Inviter name
+        const hiddenColumns = [0, 4, 5, 6, 9, 10]; // Column J (index 9) and Column K (index 10) hidden from main table
 
         async function loadSheetData() {
             try {
@@ -179,6 +189,7 @@
 
             if (globalData.length > 0) {
                 populateExtraDropdown(globalData.slice(1));
+                populateTableSummary(globalData.slice(1));
                 populateInviterFilters(globalData.slice(1));
                 renderDashboard(globalData);
                 filterTable(); 
@@ -207,6 +218,45 @@
             });
         }
 
+        function populateTableSummary(dataRows) {
+            let container = document.getElementById('tableSummaryContainer');
+            let tableMap = {};
+
+            // Column J is index 9 (Tables), Column K is index 10 (Count Per Table)
+            dataRows.forEach(row => {
+                let tableName = row[9] ? row[9].trim() : "";
+                let countVal = row[10] ? parseInt(row[10].trim()) || 0 : 0;
+
+                if (tableName !== "" && countVal >= 1) {
+                    tableMap[tableName] = countVal;
+                }
+            });
+
+            let sortedTables = Object.keys(tableMap).sort();
+
+            if (sortedTables.length === 0) {
+                container.innerHTML = `<span class="text-xs text-gray-500 italic">No tables with active counts yet.</span>`;
+                return;
+            }
+
+            let html = "";
+            sortedTables.forEach(table => {
+                let count = tableMap[table];
+                let isOverLimit = count >= 11;
+
+                // Color styling: Red if >= 11, otherwise sky/blue theme
+                let bgClass = isOverLimit ? "bg-red-50 border-red-200 text-red-900" : "bg-sky-50 border-sky-200 text-sky-900";
+                let badgeClass = isOverLimit ? "bg-red-600 text-white" : "bg-sky-700 text-white";
+
+                html += `<div class="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-lg border ${bgClass}">
+                    <span>Table ${table}:</span>
+                    <span class="px-2 py-0.5 rounded-md ${badgeClass}">${count}</span>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
         function populateInviterFilters(dataRows) {
             let container = document.getElementById('inviterFilters');
             let uniqueInviters = new Set();
@@ -226,7 +276,6 @@
                 <span>Select All</span>
             </label>`;
 
-            // Add the Blanks option if there are unassigned rows
             if (hasBlanks) {
                 html += `<label class="inline-flex items-center space-x-2 text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-900 px-3 py-1.5 rounded-lg cursor-pointer transition-colors border border-amber-200">
                     <input type="checkbox" name="inviterCheckbox" value="__BLANK__" checked onchange="filterTable()" class="rounded text-sky-700 focus:ring-sky-600">
@@ -365,7 +414,6 @@
                 return matchesName && matchesResponse && matchesExtra && matchesInviter;
             });
 
-            // Calculate and update the specific inviter subtotal badge based ONLY on the inviter filter selection
             let inviterFilteredRows = dataRows.filter(row => {
                 let rowInviter = row[6] ? row[6].trim() : "";
                 if (rowInviter === "") {
